@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: fullstack-frontend-
+spec:
+  pipelineRef:
+    name: nodejs-pipeline
+  params:
+    - name: app-name
+      value: fullstack-frontend
+    - name: source-repo
+      value: https://github.com/davidbieder/fullstack-frontend
+    - name: image-repo
+      value: quay.io/davidbieder/fullstack-frontend
+  serviceAccountName: build-bot
+  workspaces:
+    - name: pipeline-shared-data
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi

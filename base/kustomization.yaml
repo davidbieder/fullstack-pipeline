@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - config-map-gitops-repo.yaml
+  - credentials-git.yaml
+  - credentials-quay-io.yaml
+  - pipeline-nodejs.yaml
+  - sa-build-bot.yaml
+  - sa-deployer.yaml
+  - sa-vcs-trigger.yaml
+  - task-commit-manifest.yaml
+  - task-kustomize.yaml
+  - task-try-to-deploy.yaml
+  - https://raw.githubusercontent.com/tektoncd/catalog/main/task/npm/0.1/npm.yaml
+  - vcs-trigger.yaml
