@@ -75,9 +75,20 @@ spec:
       workspaces:
         - name: source
           workspace: pipeline-shared-data
-    - name: try-to-deploy
+    - name: set-hostname
       runAfter:
         - create-envorinment-config
+      taskRef:
+        name: set-hostname
+      params:
+        - name: prefix
+          value: staging
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
+    - name: try-to-deploy
+      runAfter:
+        - set-hostname
       taskRef:
         name: try-to-deploy
       params:
@@ -88,9 +99,39 @@ spec:
       workspaces:
         - name: source
           workspace: pipeline-shared-data
-    - name: update-prod-config
+    - name: create-prod-envorinment-config
       runAfter:
         - try-to-deploy
+      taskRef:
+        name: kustomize
+      params:
+        - name: app-name
+          value: "$(params.app-name)"
+        - name: app-namespace
+          value: "$(context.pipelineRun.namespace)"
+        - name: source-repo
+          value: "$(params.source-repo)"
+        - name: commit
+          value: "$(tasks.clone-repository.results.commit)"
+        - name: image-repo
+          value: "$(params.image-repo)"
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
+    - name: set-prod-hostname
+      runAfter:
+        - create-prod-envorinment-config
+      taskRef:
+        name: set-hostname
+      params:
+        - name: prefix
+          value: production
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
+    - name: update-prod-config
+      runAfter:
+        - set-prod-hostname
       taskRef:
         name: commit-manifest
       params:

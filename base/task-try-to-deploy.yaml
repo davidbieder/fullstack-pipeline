@@ -28,11 +28,6 @@ spec:
         echo -e "Deploying into: ${APP_NAMESPACE}"
         kubectl apply -n ${APP_NAMESPACE} -f ./k8s/manifests.yaml --validate=false > results.out
         cat results.out
-
-        if [ -f ./k8s/env-config.staging.yaml ]; then
-          kubectl apply -n ${APP_NAMESPACE} -f ./k8s/env-config.staging.yaml --validate=false > results.out
-          cat results.out
-        fi
     - name: verify-deploy
       image: quay.io/upslopeio/kubectl:latest
       script: |

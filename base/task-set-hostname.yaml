@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: set-hostname
+spec:
+  params:
+    - name: prefix
+      type: string
+      description: the desired hostname prefix
+  workspaces:
+    - name: source
+      description: contains the manifests.yaml
+  steps:
+    - name: set-host
+      image: quay.io/upslopeio/kubectl:latest
+      script: |
+        #!/bin/sh
+        cd source/k8s
+        set -e
+
+        HOST=$(kubectl get routes vcs-trigger -o jsonpath='{.spec.host}')
+        sed "s/host\.name/${HOST}/g" manifests.yaml > manifests.yaml.host
+        sed "s/vcs-trigger/$(params.prefix)/g" manifests.yaml.host > manifests.yaml
+        rm manifests.yaml.host
+
+        cat manifests.yaml

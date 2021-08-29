@@ -111,9 +111,6 @@ spec:
 
         mkdir -p prod/${NAMESPACE}/${APP_NAME}/
         cp ../source/k8s/manifests.yaml prod/${NAMESPACE}/${APP_NAME}/
-        if [ -f ../source/k8s/env-config.prod.yaml ]; then
-          cp ../source/k8s/env-config.prod.yaml prod/${NAMESPACE}/${APP_NAME}/
-        fi
 
         if [[ $(git status -s | wc -l) -eq 0 ]]; then
           echo "No changes"
@@ -121,8 +118,5 @@ spec:
         fi
 
         git add "prod/${NAMESPACE}/${APP_NAME}/manifests.yaml"
-        if [ -f ../source/k8s/env-config.prod.yaml ]; then
-          git add "prod/${NAMESPACE}/${APP_NAME}/env-config.prod.yaml"
-        fi
         git commit -m "update ${APP_NAME} to commit ${SHA}"
         git push

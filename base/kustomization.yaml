@@ -10,6 +10,7 @@ resources:
   - sa-vcs-trigger.yaml
   - task-commit-manifest.yaml
   - task-kustomize.yaml
+  - task-set-hostname.yaml
   - task-try-to-deploy.yaml
   - https://raw.githubusercontent.com/tektoncd/catalog/main/task/npm/0.1/npm.yaml
   - vcs-trigger.yaml
